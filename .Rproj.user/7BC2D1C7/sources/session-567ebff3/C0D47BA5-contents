@@ -28,6 +28,7 @@ get_odds <- function(api_key, sport, region = "us", market = "h2h") {
 # Example usage
 api_key <- Sys.getenv("MY_API_KEY")
 sport <- "basketball_nba" 
+print(api_key)
 
 # Fetch and print the odds
 odds <- get_odds(api_key, sport)
