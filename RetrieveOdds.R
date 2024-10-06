@@ -1,7 +1,8 @@
 # Load necessary libraries
 library(httr)
 library(jsonlite)
-
+library(shiny)
+library(shinythemes)
 # Function to fetch odds from the Odds API
 get_odds <- function(api_key, sport, region = "us", market = "h2h") {
   base_url <- "https://api.the-odds-api.com/v4/sports/"
@@ -33,3 +34,27 @@ print(api_key)
 # Fetch and print the odds
 odds <- get_odds(api_key, sport)
 print(odds)
+
+# Define UI
+ui <- fluidPage(
+  theme = shinytheme("cerulean"), # Use the Cerulean theme
+  titlePanel("Themed Shiny App"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("num", "Choose a number:", min = 1, max = 100, value = 50)
+    ),
+    mainPanel(
+      textOutput("outputText")
+    )
+  )
+)
+
+# Define server logic
+server <- function(input, output) {
+  output$outputText <- renderText({
+    paste("You selected:", input$num)
+  })
+}
+
+# Run the app
+shinyApp(ui = ui, server = server)
