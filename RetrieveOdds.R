@@ -50,8 +50,13 @@ if ("bookmakers" %in% names(odds)) {
       
       # Loop through each outcome within the market
       for (outcome in market$outcomes) {
-        cat("Team/Outcome:", outcome$name, "\n")
-        cat("Odds:", outcome$price, "\n\n")
+        for (outcome in market$outcomes) {
+          cat("Team/Outcome:", outcome$name, "\n")
+          cat("Odds:", outcome$price, "\n")
+          
+          # Print the calculated price as 1/price * 100
+          cat("Calculated Price:", 1 / outcome$price * 100, "\n\n")
+        }
       }
     }
     cat("\n")
@@ -60,28 +65,3 @@ if ("bookmakers" %in% names(odds)) {
   cat("No bookmakers found in the first event.\n")
 }
 
-
-your_data <- dbReadTable(conn, "odds")
-# Define UI
-ui <- fluidPage(
-  theme = shinytheme("cerulean"), # Use the Cerulean theme
-  titlePanel("Themed Shiny App"),
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("num", "Choose a number:", min = 1, max = 100, value = 50)
-    ),
-    mainPanel(
-      textOutput("outputText")
-    )
-  )
-)
-
-# Define server logic
-server <- function(input, output) {
-  output$outputText <- renderText({
-    paste("You selected:", input$num)
-  })
-}
-
-# Run the app
-shinyApp(ui = ui, server = server)
