@@ -6,6 +6,37 @@ library(shinythemes)
 library(gamlss)
 library(DBI)
 library(RSQLite)
+library(dplyr)
+
+
+
+nba_data <- read.csv("TrainingData.csv")
+nba_data <- nba_data %>%
+  filter(season_id %in% c(12022,22022,32022,42022))
+nba_data <- nba_data %>%
+  mutate(wl_home = ifelse(wl_home == "W", 1, 0))
+nba_data <- nba_data %>%
+  select(wl_home, team_name_home, team_name_away)
+
+
+
+gamlss_model <- gamlss(
+  wl_home ~ team_name_home + team_name_away,
+  family = BI,  # Binomial distribution
+  data = nba_data
+)
+
+
+new_game <- data.frame(
+  team_name_home = "Boston Celtics",
+  team_name_away = "Denver Nuggets"
+)
+
+predicted_prob <- predict(gamlss_model, newdata = new_game, type = "response")
+
+predicted_prob
+
+
 # Function to fetch odds from the Odds API
 get_odds <- function(api_key, sport, region = "us", market = "h2h") {
   base_url <- "https://api.the-odds-api.com/v4/sports/"
@@ -27,6 +58,7 @@ get_odds <- function(api_key, sport, region = "us", market = "h2h") {
   
   return(odds_data)
 }
+
 
 
 # Example usage
@@ -64,4 +96,6 @@ if ("bookmakers" %in% names(odds)) {
 } else {
   cat("No bookmakers found in the first event.\n")
 }
+
+
 
