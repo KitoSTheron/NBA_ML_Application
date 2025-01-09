@@ -1,8 +1,6 @@
 # Load necessary libraries
 library(httr)
 library(jsonlite)
-library(shiny)
-library(shinythemes)
 library(gamlss)
 library(DBI)
 library(RSQLite)
@@ -35,44 +33,6 @@ gamlss_model <- gamlss(
   family = BI,  # Binomial distribution
   data = Last_NBA_SEASON
 )
-
-new_game <- data.frame(
-  Home = "Denver Nuggets",
-  Visitor = "Brooklyn Nets"
-)
-
-predicted_prob <- predict(gamlss_model, newdata = new_game, type = "response")
-
-predicted_prob
-
-# this dataset is the last 20 years not including last year
-#nba_data <- read.csv("TrainingData.csv")
-#nba_data <- nba_data %>%
-#filter for 2022 season
-#  filter(season_id %in% c(12022,22022,32022,42022))
-#nba_data <- nba_data %>%
-#  mutate(wl_home = ifelse(wl_home == "W", 1, 0))
-#nba_data <- nba_data %>%
-#  select(wl_home, team_name_home, team_name_away)
-
-#gamlss_model2 <- gamlss(
-#  wl_home ~ team_name_home + team_name_away,
-#  family = BI,  # Binomial distribution
-#  data = nba_data
-#)
-
-
-#new_game2 <- data.frame(
-#  team_name_home = "Denver Nuggets",
-#  team_name_away = "Brooklyn Nets"
-#)
-
-#predicted_prob2 <- predict(gamlss_model2, newdata = new_game2, type = "response")
-
-#predicted_prob2
-
-
-
 
 
 # Function to fetch odds from the Odds API
